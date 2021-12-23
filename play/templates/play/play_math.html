@@ -1,0 +1,121 @@
+{% extends "play/layout.html" %}
+
+{% block body %}
+
+    <div id="app" > </div>
+
+    <script type="text/babel"> // JSX
+        
+        function App(){
+
+            // Math quistions 
+            const [state, setState] = React.useState({
+                num1: 1, 
+                num2: 1,
+                userResponse: "",
+                score: 0
+            });
+
+            function inputKeyPress(event)
+            {
+                if (event.key === "Enter")
+                {
+                    const answer = parseInt(state.userResponse);
+                    if (state.num1 * state.num2 == answer)
+                    {
+                        setState({
+                            ...state,
+                            num1: Math.floor(Math.random() * 10),
+                            num2: Math.floor(Math.random() * 10),
+                            userResponse: "",
+                            score: state.score + 1
+                        });
+                    }
+                    else{
+                        setState({
+                            ...state,
+                            userResponse: "",
+                            score: state.score - 1
+                        });
+                    }
+                }
+                
+
+            }
+
+            function updateUserResponse(event)
+            {
+                setState({
+                    ...state,
+                    userResponse: event.target.value
+                });
+            }
+
+            // Timer setup
+            const[round, setRound] = React.useState(0);
+            const[sec, setSec] = React.useState(6);
+            const[timerOn, setTimerOn] = React.useState(false);
+            const[checkTime, setCheckTime] = React.useState(true);
+
+            function startTimer() 
+            {
+                if (round === 0)
+                {
+                    setCheckTime(false);
+                    setRound(1);
+                }
+                if (sec == 0)
+                    window.location.reload(true);
+                setTimerOn(true);
+            }
+
+            React.useEffect(() => 
+            {
+                let interval = null;
+                
+                document.getElementById("in").focus();
+                
+                if(sec > 0 && timerOn)
+                {
+                    
+
+                    interval = setInterval(() => 
+                    {
+                       setSec(sec => sec - 1)
+                    }, 1000)
+                }
+                else
+                {
+                    setCheckTime(true);
+                    clearInterval(interval)
+                }
+                return () => clearInterval(interval)
+            }, [sec , timerOn])  
+
+            // determine player's high score
+            if (!localStorage.getItem('counter'))
+                localStorage.setItem('counter', 0)
+            else if (state.score > localStorage.getItem('counter'))
+                localStorage.setItem('counter', state.score)
+            let high_score = localStorage.getItem('counter')
+            
+            
+            return(
+                <div> 
+                    <h1> MATH CHALLENGE </h1>
+                    <div> {state.num1} * {state.num2} = </div>    
+                    <input id="in" onKeyPress = {inputKeyPress} onChange = {updateUserResponse} value = {state.userResponse} disabled = {checkTime} />
+                    <div> Score: {state.score} </div>
+                    <div></div>
+                    <div id="timer"> {sec} </div>
+                    <button autoFocus = {true} onClick = {startTimer} > Start! </button>
+                    <p> Your high score is: {high_score} </p>  
+                </div>
+            );
+        }
+
+        ReactDOM.render(<App/>, document.querySelector("#app")); // App func will apear inside div id=app
+    </script>
+
+    
+{% endblock %}

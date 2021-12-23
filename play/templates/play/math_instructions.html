@@ -1,0 +1,24 @@
+{% extends "play/layout.html" %}
+
+{% block body %}
+
+<h1>Welcome to the challenge!</h1>
+<div>
+    <p>Lets see how many points you can get with in 60 seconds.
+        This is how the game works:
+        <ul>
+            <li> Press "Enter" in order to start the game, it will start the clock and you can start answering. </li>
+            <li> You will have a math multiplication question on the top.</li>
+            <li> For every answer you enter that is correct, you will gain a point. Every wrong answer you will lose a point</li>
+            <li> To enter your answer type in the text field your answer (number) and press "Enter".</li>
+            <li> Notice: once you start the clock you have 60 seconds.</li>
+            <li> We would wish you good luck, but we belive in hard work... Go get'em! </li>
+        </ul>
+    </p> 
+</div>
+
+<a href= "{% url 'play_math' %}" >
+    <button> Go to game </button>
+</a>
+
+{% endblock %}

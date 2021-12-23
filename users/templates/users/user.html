@@ -1,0 +1,20 @@
+{% extends "users/layout.html" %}
+
+{% block body %}
+
+<h1>welcome {{ request.user.username }} </h1>
+<h2> Your high score is: {{ request.user.score }}</h2>
+
+<div>
+    <a href= "{% url 'math_instructions' %}" >
+    <button> Math challenge </button>
+</a>
+</div>
+
+<div>
+    <a href="{% url 'logout' %}">Log out</a>
+</div>
+
+
+
+{% endblock %}
